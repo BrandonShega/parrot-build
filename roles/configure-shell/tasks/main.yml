@@ -1,0 +1,22 @@
+---
+- name: "Install ZSH"
+  apt:
+    name: zsh
+    state: present
+  become: true
+  become_method: sudo
+- name: "Set current user's shell to ZSH"
+  become: yes
+  vars:
+    the_user: "{{ ansible_user_id }}"
+  user:
+    name: "{{ the_user }}"
+    shell: /usr/bin/zsh
+- name: "Configure zsh"
+  copy:
+    src: "{{ item }}"
+    dest: "{{ ansible_env.HOME }}"
+  loop:
+    - .zsh
+    - .zshenv
+    - .zshrc
